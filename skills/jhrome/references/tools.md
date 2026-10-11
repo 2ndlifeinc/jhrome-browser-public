@@ -23,19 +23,19 @@ Prefer these for clicking, typing and reading: they remember the element per sen
 ## Pages and tabs
 
 - `browser_navigate` (`jhrome go`), `browser_navigate_back`, `browser_navigate_forward`, `browser_reload`.
-- `browser_tabs`: `{"action":"list"}` (`jhrome tabs`), `{"action":"new","url":"…"}` opens and selects a tab in `Default`, `{"action":"select","index":N}`, `{"action":"close","index":N}`. Indexes count only the current space's tabs; each line shows the tab's label. The last tab of jhrome cannot be closed.
+- `browser_tabs`: `{"action":"list"}` (`jhrome tabs`), `{"action":"new","url":"…"}` opens and selects a tab in `Default`, `{"action":"select","index":N}`, `{"action":"close","index":N}`. Indexes count only the current workspace's tabs; each line shows the tab's label. The last tab of jhrome cannot be closed.
 - `browser_wait_for`: `{"text":"…"}`, `{"textGone":"…"}` or `{"time":seconds}`.
 
-## Spaces
+## Workspaces
 
-Every tool call runs in the space named by the `x-jhrome-space` header (CLI `--space`, `JHROME_SPACE`), else the caller's default space. Browser tools see only that space's tabs.
+Every tool call runs in the workspace named by the `x-jhrome-workspace` header (CLI `--workspace`, `JHROME_WORKSPACE`), else the caller's default workspace. Browser tools see only that workspace's tabs.
 
-- `jhrome_spaces` (`jhrome spaces`): spaces (id, name, ownership, controller, finished, labelled tabs), unmanaged tabs with `targetId`, and your default space.
-- `jhrome_space_open` (`jhrome space open`): `{"name":"…"}` resumes or creates your space with that name, `{"id":N}` resumes any space; it becomes your default.
-- `jhrome_space_adopt` `{"targetId":"…","label"?}`, `jhrome_space_release` `{"label":"p1"}`: bring an unmanaged tab in, give a tab back without closing it.
-- `jhrome_space_finish` `{"keep":["p2"]}`: once; closes every other labelled tab and the space when none remain.
-- `jhrome_space_handoff`, `jhrome_space_takeover`, `jhrome_space_claim`: ownership `agentDelegatedToUser`, back to `agent`, or take a user-owned space. Browser tools refuse a space the user controls.
-- `jhrome_space_log` `{"space"?,"limit"?}` (`jhrome space log`): every agent's calls in the space. The log stays in `<data-dir>/agent-spaces/action-log` until the user deletes it, at most 1 GB.
+- `jhrome_workspaces` (`jhrome workspaces`): workspaces (id, name, ownership, controller, finished, labelled tabs), unmanaged tabs with `targetId`, and your default workspace.
+- `jhrome_workspace_open` (`jhrome workspace open`): `{"name":"…"}` resumes or creates your workspace with that name, `{"id":N}` resumes any workspace; it becomes your default.
+- `jhrome_workspace_adopt` `{"targetId":"…","label"?}`, `jhrome_workspace_release` `{"label":"p1"}`: bring an unmanaged tab in, give a tab back without closing it.
+- `jhrome_workspace_finish` `{"keep":["p2"]}`: once; closes every other labelled tab and the workspace when none remain.
+- `jhrome_workspace_handoff`, `jhrome_workspace_takeover`, `jhrome_workspace_claim`: ownership `agentDelegatedToUser`, back to `agent`, or take a user-owned workspace. Browser tools refuse a workspace the user controls.
+- `jhrome_workspace_log` `{"workspace"?,"limit"?}` (`jhrome workspace log`): every agent's calls in the workspace. The log stays in `<data-dir>/agent-workspaces/action-log` until the user deletes it, at most 1 GB.
 
 ## Observation
 
@@ -65,7 +65,7 @@ Every tool call runs in the space named by the `x-jhrome-space` header (CLI `--s
 
 ## jhrome profile
 
-- `jhrome_profiles` (`jhrome profiles`): every profile's directory, name, signed-in Google account and the space's tab indexes, tabs of unknown profile, the current tab, data dir, Chrome user-data-dir, browser version.
+- `jhrome_profiles` (`jhrome profiles`): every profile's directory, name, signed-in Google account and the workspace's tab indexes, tabs of unknown profile, the current tab, data dir, Chrome user-data-dir, browser version.
 - `jhrome_tab_new` (`jhrome tabs new`): `{"profile":"Profile 1","url":"…"}` opens a tab in that profile and selects it. `profile` defaults to `Default`. `{"account":"me@example.com"}` instead picks the one profile recorded as holding that account.
 - `jhrome_accounts` (`jhrome accounts`): per profile, the Google account and per registry site the recorded account id, last login page visit and last check. `{"verify":true}` opens each site's account page in the profile to record what it shows; a profile window that is not the last active one comes to the front.
 - `jhrome_extension_list`, `jhrome_extension_install` (absolute path of an unpacked extension; stays installed across restarts and loads from that directory, so keep it), `jhrome_extension_uninstall`, `jhrome_extension_reload`, `jhrome_extension_enable`, `jhrome_extension_disable` (`jhrome extensions …`): unpacked extensions of the current tab's profile. `reload` reads the directory again and returns the load error while the loaded version keeps running.
