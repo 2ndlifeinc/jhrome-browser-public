@@ -38,7 +38,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 - The first command in an empty workspace opens its tab; tabs it opens and their popups join it. To work on a tab the user opened, `jhrome workspace adopt <targetId>` (from `jhrome workspaces`); `jhrome workspace release <label>` gives one back without closing it.
 - A result that starts with `Another agent used workspace` lists what other agents did there since your last call. Take a snapshot before acting on it; `jhrome workspace log` prints the whole log.
 - When the user must act in the browser, `jhrome workspace handoff`, say what to do and end your turn; browser commands are refused until `jhrome workspace takeover` after they confirm. `jhrome workspace claim` takes a user-owned workspace only when the user asks.
-- When the task succeeds, `jhrome workspace finish` once: it closes the workspace's tabs. Add `--keep <label>` only for a tab the user asked for or must see. Do not finish when you stop for the user or an error.
+- When the task succeeds, `jhrome workspace finish` once: it closes the workspace's tabs. Add `--keep <label>` only for a tab the user asked for or must see. Do not finish when you stop for the user or an error. A workspace left idle for an hour while no visible tab shows it closes on its own; `jhrome workspace pin` only when the user asks to keep it.
 
 ## Registered flows first
 
@@ -48,7 +48,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 - A flow step that spends something once (a transfer, a one-time issue) is refused unless the start call approves that exact sentence: `jhrome flow <id> --approve '<sentence>'`. Approve only what the user asked for; the approval lasts for that run.
 - A flow that stops says why. Do not rerun a flow that stopped after a password or an SMS step without reading the reason: a rerun can re-enter the password or resend the message.
 - A flow that answers `Not started: connectors of <flow> are not ready` touched nothing. Report every listed reason to the user at once and start it again only after they say it is fixed.
-- To fix a flow or the action library while testing it, start jhrome from a jhrome source checkout with `JHROME_FLOW_SOURCES=<site-element-registry checkout>`; every `jhrome flows`/`jhrome flow` call rebuilds them from that checkout. Never copy builds into `node_modules` or restart jhrome to apply such an edit: a restart relaunches the browser and drops session-only sign-ins and the certificate service's remembered connection, so the next run takes a longer path (SMS again).
+- To fix a flow or the action library while testing it, start jhrome from a jhrome source checkout with `JHROME_FLOW_SOURCES=<site-element-registry checkout>`; every `jhrome flows`/`jhrome flow` call rebuilds them from that checkout. Never copy builds into `node_modules` or restart jhrome to apply such an edit: a restart brings tabs and cookies back, but drops the certificate service's remembered connection and sign-ins of sites that end them when the page closes, so the next run takes a longer path (SMS again).
 
 ## Observe cheaply
 
@@ -65,9 +65,10 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 | `jhrome snapshot [--target ref] [--depth n]` | Print the current tab, or one element's subtree |
 | `jhrome screenshot [--target ref] [--full-page] [--out file]` | Save a PNG and print its absolute path |
 | `jhrome workspaces` / `jhrome workspace open <name\|id>` | List the workspaces and unmanaged tabs / make a workspace your default |
-| `jhrome workspace adopt <targetId> \| release <label> \| finish [--keep label]... \| handoff \| takeover \| claim \| log` | Manage the current workspace |
+| `jhrome workspace adopt <targetId> \| release <label> \| finish [--keep label]... \| pin \| unpin \| handoff \| takeover \| claim \| log` | Manage the current workspace |
 | `jhrome tabs` | List the workspace's tabs with their label and profile; the current one is marked |
-| `jhrome tabs new [url] [--profile dir \| --account id] [--no-snapshot]` | Open a tab in the workspace (in `Default` unless `--profile`/`--account`), make it current, print its snapshot |
+| `jhrome tabs new [url] [--profile dir \| --account id [--site id]] [--no-snapshot]` | Open a tab in the workspace (in `Default` unless `--profile`/`--account`), make it current, print its snapshot |
+| `jhrome tabs profile (--profile dir \| --account id [--site id])` | Reopen the current tab in that profile with the same label; the page reloads there and the old tab closes |
 | `jhrome profiles` | List profiles: directory, name, Google account, tab indexes; also the data dir |
 | `jhrome import list` / `jhrome import --browser chrome --profile Default [--profile <dir>]...` | Import profiles from Chrome/Edge/Brave into new jhrome profiles, keeping sign-ins (cookies, saved passwords), bookmarks and history. Ask the user before importing; macOS shows one keychain approval |
 | `jhrome accounts [--profile dir] [--verify] [--json]` | Profile × site table of signed-in accounts; `--verify` re-reads them in each profile |
@@ -81,7 +82,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 | `jhrome flows` | List registered site flows and the connectors in the data dir |
 | `jhrome flow <id> [--input json] [--approve sentence]` / `jhrome flow --run <runId> [--ref r \| --absent \| --cancel]` | Run a flow / continue or wait for a run |
 | `jhrome tools [name]` / `jhrome call <tool> '<json>'` | Every other browser tool; see [references/tools.md](references/tools.md) |
-| `jhrome open` / `jhrome close` | Start jhrome / close the whole browser. Close only when the user asks |
+| `jhrome open` / `jhrome close` / `jhrome restart` | Start jhrome / close the whole browser / close and start it again with its Default-profile tabs and cookies (installed release only). Workspace tabs come back in their workspace with their labels; other restored tabs belong to no workspace: adopt them from `jhrome workspaces`. Close or restart only when the user asks |
 | `jhrome status` / `jhrome version` | Instance state / installed and running versions |
 
 - `--data-dir <dir>` (or `JHROME_DATA_DIR`) picks the jhrome instance. Without it the user's default instance is used.
@@ -97,7 +98,8 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 ## Profiles
 
 - One jhrome holds several Chrome profiles (`Default`, `Profile 1`, …), each with its own cookies, sign-ins and extensions. `jhrome profiles` shows which Google account each one holds; tabs show `(profile: …)`, or `unknown` until jhrome has opened a tab in that profile.
-- To act as another account, open your tab there: `jhrome tabs new <url> --profile "Profile 1"`, or `--account <email or id>` when `jhrome accounts` shows exactly one profile holding it. Never create a profile; ask the user to add one from the jhrome profile menu.
+- To act as an account on a site, use `jhrome tabs new <url> --site <site id> --account <id>` (site ids such as `naver.com`, `google.com`; an unknown id is refused with the list). It opens the profile recorded for that account on that site. When none is, jhrome creates the next `Profile N` and the output starts with `### New profile`: sign in there, or hand off to the user to sign in. `--profile "Profile 1"` picks a profile directly.
+- To carry the current tab to another account, `jhrome tabs profile --site <site id> --account <id>` (or `--profile`): same label, the page loads again with that profile's sign-in; unsaved input is lost.
 - Opening a tab in a profile whose window is not the last active one brings that window to the front. A headless jhrome has only `Default`.
 - Cookie, storage-state and extension tools act on the current tab's profile.
 
