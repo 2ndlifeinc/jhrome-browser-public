@@ -58,4 +58,6 @@ The CLI finds a running jhrome through `control-endpoint.json` in the data dir (
 
 `--data-dir` never falls back to the default instance: with no instance running on that data dir, the CLI launches one for it.
 
+A call that timed out, failed or was slow: read `logs/runtime.<date>.<n>.log` in the data dir. Each JSON line is one tool call with `waitMs` (time queued behind earlier calls) and `ms` (its own run); a timed-out call also lists every tab with `responsive` and the free memory. Browser warnings and errors are in `logs/chrome.log`, and those of the session before the last restart in `logs/chrome.previous.log`.
+
 Then go back to the original task in [SKILL.md](../SKILL.md).
