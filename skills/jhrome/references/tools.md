@@ -35,7 +35,7 @@ Every tool call runs in the workspace named by the `x-jhrome-workspace` header (
 - `jhrome_workspace_adopt` `{"targetId":"…","label"?}`, `jhrome_workspace_release` `{"label":"p1"}`: bring an unmanaged tab in, give a tab back without closing it.
 - `jhrome_workspace_finish` `{"keep":["p2"]}`: once; closes every other labelled tab and the workspace when none remain.
 - `jhrome_workspace_pin` `{"pinned"?}` (`jhrome workspace pin|unpin`): jhrome closes an agent-owned workspace that no visible tab shows once it finished or sat idle for an hour, and brings workspace tabs back with their labels after a restart. Pin only when the user asks to keep the workspace.
-- `jhrome_workspace_handoff`, `jhrome_workspace_takeover`, `jhrome_workspace_claim`: ownership `agentDelegatedToUser`, back to `agent`, or take a user-owned workspace. Browser tools refuse a workspace the user controls.
+- `jhrome_workspace_handoff`, `jhrome_workspace_takeover`, `jhrome_workspace_claim`: ownership `agentDelegatedToUser`, back to `agent`, or take a user-owned workspace. Browser tools refuse a workspace the user controls. jhrome shows a "Take over task" button on the tabs of an agent-owned workspace; when the user presses it the workspace becomes `agentDelegatedToUser`.
 - `jhrome_workspace_log` `{"workspace"?,"limit"?}` (`jhrome workspace log`): every agent's calls in the workspace. The log stays in `<data-dir>/agent-workspaces/action-log` until the user deletes it, at most 1 GB.
 
 ## Observation

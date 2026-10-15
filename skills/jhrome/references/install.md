@@ -19,7 +19,7 @@ jhrome skills status
 
 Builds are published at https://github.com/2ndlifeinc/jhrome-browser-public (releases `latest-darwin-arm64`, `latest-win32-x64`). Each holds `update-manifest.json` with the asset URL and its sha256. Install only with the user's agreement; the download is about 300 MB.
 
-macOS (Apple silicon):
+macOS (Apple silicon and Intel):
 
 ```bash
 work=$(mktemp -d)
