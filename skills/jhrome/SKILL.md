@@ -100,7 +100,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 - One jhrome holds several Chrome profiles (`Default`, `Profile 1`, …), each with its own cookies, sign-ins and extensions. `jhrome profiles` shows which Google account each one holds; tabs show `(profile: …)`, or `unknown` until jhrome has opened a tab in that profile.
 - To act as an account on a site, use `jhrome tabs new <url> --site <site id> --account <id>` (site ids such as `naver.com`, `google.com`; an unknown id is refused with the list). It opens the profile recorded for that account on that site. When none is, jhrome creates the next `Profile N` and the output starts with `### New profile`: sign in there, or hand off to the user to sign in. `--profile "Profile 1"` picks a profile directly.
 - To carry the current tab to another account, `jhrome tabs profile --site <site id> --account <id>` (or `--profile`): same label, the page loads again with that profile's sign-in; unsaved input is lost.
-- Opening a tab in a profile whose window is not the last active one brings that window to the front. A headless jhrome has only `Default`.
+- Opening a tab in another profile does not bring its window to the front; a profile without a window gets a new window behind the others. Headless jhrome opens and creates other profiles too.
 - Cookie, storage-state and extension tools act on the current tab's profile.
 
 ## The user's browser
