@@ -33,7 +33,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 
 ## Workspaces
 
-- Every browser command runs in a workspace: one task's own tabs, labelled `p1`, `p2`… for good, with its own current tab. Other agents' workspaces and the tabs the user opened are invisible to the browser tools, so another agent cannot move your tab and you cannot move theirs.
+- Every browser command runs in a workspace: one task's own tabs, labelled `p1`, `p2`… for good, with its own current tab. A workspace opens its tabs in a window of its own (one per profile), behind the window the user works in. Other agents' workspaces and the tabs the user opened are invisible to the browser tools, so another agent cannot move your tab and you cannot move theirs.
 - Start each user task with `jhrome workspace open "<task name>"`; later commands run in it. Your agent identity is `JHROME_AGENT`, else `PI_SESSION_ID`, else `cli`. `--workspace <id>` (or `JHROME_WORKSPACE`) runs one command in another workspace; `jhrome workspaces` lists them.
 - The first command in an empty workspace opens its tab; tabs it opens and their popups join it. To work on a tab the user opened, `jhrome workspace adopt <targetId>` (from `jhrome workspaces`); `jhrome workspace release <label>` gives one back without closing it.
 - A result that starts with `Another agent used workspace` lists what other agents did there since your last call. Take a snapshot before acting on it; `jhrome workspace log` prints the whole log.
