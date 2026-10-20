@@ -33,7 +33,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 
 ## Workspaces
 
-- Every browser command runs in a workspace: one task's own tabs, labelled `p1`, `p2`… for good, with its own current tab. A workspace opens its tabs in a window of its own (one per profile), behind the window the user works in. Other agents' workspaces and the tabs the user opened are invisible to the browser tools, so another agent cannot move your tab and you cannot move theirs.
+- Every browser command runs in a workspace: one task's own tabs, labelled `p1`, `p2`… for good, with its own current tab. A workspace opens its tabs in a hidden window of its own (one per profile); the user sees it by picking it in jhrome's app menu > Workspaces. Other agents' workspaces and the tabs the user opened are invisible to the browser tools, so another agent cannot move your tab and you cannot move theirs.
 - Start each user task with `jhrome workspace open "<task name>"`; later commands run in it. Your agent identity is `JHROME_AGENT`, else `PI_SESSION_ID`, else `cli`. `--workspace <id>` (or `JHROME_WORKSPACE`) runs one command in another workspace; `jhrome workspaces` lists them.
 - The first command in an empty workspace opens its tab; tabs it opens and their popups join it. To work on a tab the user opened, `jhrome workspace adopt <targetId>` (from `jhrome workspaces`); `jhrome workspace release <label>` gives one back without closing it.
 - A result that starts with `Another agent used workspace` lists what other agents did there since your last call. Take a snapshot before acting on it; `jhrome workspace log` prints the whole log.
@@ -107,7 +107,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 
 - This is the user's real browser: their tabs, cookies and accounts. Adopt a user tab only when the task needs it, and release it instead of closing it.
 - For a reCAPTCHA, hCaptcha or Turnstile challenge run `jhrome call browser_captcha` first. When it returns `choose_tiles`, open the image at `path`, pick every tile that matches the question and answer with `jhrome call browser_captcha '{"tiles":[…]}'`; when you cannot or will not pick the tiles yourself, run `jhrome call browser_captcha '{"vision":true}'` so the built-in vision fallback solves the grid. Hand over only when it reports `handoff`.
-- Stop and hand over to the user at logins that need their password or a verification code, CAPTCHAs that `browser_captcha` hands off, payments, permission prompts, and anything irreversible. Run `jhrome workspace handoff`, say exactly what they should do in the jhrome window and end your turn. After they confirm, run `jhrome workspace takeover`, then `jhrome snapshot`, and continue from what it shows.
+- Stop and hand over to the user at logins that need their password or a verification code, CAPTCHAs that `browser_captcha` hands off, payments, permission prompts, and anything irreversible. Run `jhrome workspace handoff`, tell them to open your workspace (its number and name) from jhrome's app menu > Workspaces, say exactly what they should do there and end your turn. After they confirm, run `jhrome workspace takeover`, then `jhrome snapshot`, and continue from what it shows.
 - When the task is done, `jhrome workspace finish` (with `--keep <label>` when the user should see a result); say which tab holds it.
 - No tool can close jhrome or its last tab; `jhrome close` is the only way and it closes the user's browser.
 - `jhrome task "<text>"` hands a whole task to jhrome's own assistant (needs `jhrome oauth` sign-in). Prefer driving the browser yourself.
