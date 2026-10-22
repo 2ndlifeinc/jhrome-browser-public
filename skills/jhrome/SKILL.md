@@ -48,6 +48,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 - A flow step that spends something once (a transfer, a one-time issue) is refused unless the start call approves that exact sentence: `jhrome flow <id> --approve '<sentence>'`. Approve only what the user asked for; the approval lasts for that run.
 - A flow that stops says why. Do not rerun a flow that stopped after a password or an SMS step without reading the reason: a rerun can re-enter the password or resend the message.
 - A flow that answers `Not started: connectors of <flow> are not ready` touched nothing. Report every listed reason to the user at once and start it again only after they say it is fixed.
+- A flow registered in a newer site-flows release than this jhrome carries: `jhrome flows install <version>` (or `latest`); `jhrome flows` shows the version in `source`.
 - To fix a flow or the action library while testing it, start jhrome from a jhrome source checkout with `JHROME_FLOW_SOURCES=<site-element-registry checkout>`; every `jhrome flows`/`jhrome flow` call rebuilds them from that checkout. Never copy builds into `node_modules` or restart jhrome to apply such an edit: a restart brings tabs and cookies back, but drops the certificate service's remembered connection and sign-ins of sites that end them when the page closes, so the next run takes a longer path (SMS again).
 
 ## Observe cheaply
@@ -80,6 +81,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 | `jhrome extensions [install <dir> \| uninstall <id> \| reload <id> \| enable <id> \| disable <id>]` | List or manage unpacked extensions of the current tab's profile |
 | `jhrome extensions popup <id>` / `jhrome extensions sidepanel <id>` | Open the extension's popup or side panel for the current tab as the current tab and print its snapshot; `snapshot`, `act` and `call` then work inside it |
 | `jhrome flows` | List registered site flows and the connectors in the data dir |
+| `jhrome flows install <version\|latest\|bundled>` | Run flows from a published site-flows version without updating jhrome; `bundled` goes back to the built-in ones |
 | `jhrome flow <id> [--input json] [--approve sentence]` / `jhrome flow --run <runId> [--ref r \| --absent \| --cancel]` | Run a flow / continue or wait for a run |
 | `jhrome tools [name]` / `jhrome call <tool> '<json>'` | Every other browser tool; see [references/tools.md](references/tools.md) |
 | `jhrome open` / `jhrome close` / `jhrome restart` | Start jhrome / close the whole browser / close and start it again with its Default-profile tabs and cookies (installed release only). Workspace tabs come back in their workspace with their labels; other restored tabs belong to no workspace: adopt them from `jhrome workspaces`. Close or restart only when the user asks |
