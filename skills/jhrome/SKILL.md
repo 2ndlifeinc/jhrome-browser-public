@@ -71,6 +71,8 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 | `jhrome tabs new [url] [--profile dir \| --account id [--site id]] [--no-snapshot]` | Open a tab in the workspace (in `Default` unless `--profile`/`--account`), make it current, print its snapshot |
 | `jhrome tabs profile (--profile dir \| --account id [--site id])` | Reopen the current tab in that profile with the same label; the page reloads there and the old tab closes |
 | `jhrome profiles` | List profiles: directory, name, Google account, tab indexes; also the data dir |
+| `jhrome profiles new <name> [--open url]` / `jhrome profiles rename <dir> <name>` | Create a named profile (prints its directory; `--open` also opens a tab there), or rename one |
+| `jhrome profiles delete <dir> [--yes]` | Without `--yes`, print what deleting would lose (accounts, open tabs). Ask the user before `--yes`: cookies, sign-ins, saved passwords and history go for good |
 | `jhrome import list` / `jhrome import --browser chrome --profile Default [--profile <dir>]...` | Import profiles from Chrome/Edge/Brave into new jhrome profiles, keeping sign-ins (cookies, saved passwords), bookmarks and history. Ask the user before importing; macOS shows one keychain approval |
 | `jhrome accounts [--profile dir] [--verify] [--json]` | Profile × site table of signed-in accounts; `--verify` re-reads them in each profile |
 | `jhrome act "<sentence>" [--ref r] [--value text] [--method name] [--optional] [--no-snapshot]` | Click, or type `--value`; `--optional` skips instead of failing when absent |
