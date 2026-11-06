@@ -56,7 +56,7 @@ The CLI finds a running jhrome through `control-endpoint.json` in the data dir (
 | `jhrome is already running. Return to its existing window.` | Another jhrome already runs on this data dir. Use it; do not start a second one |
 | Exit code 3 | The control server refused the CLI (401/403). Quit jhrome from its window, then retry |
 
-`--data-dir` never falls back to the default instance: with no instance running on that data dir, the CLI launches one for it.
+`--data-dir` never falls back to the default instance. With no instance running on that data dir, an installed jhrome on macOS or Windows refuses to launch one unless it is the default data dir; a source checkout launches it.
 
 A call that timed out, failed or was slow: read `logs/runtime.<date>.<n>.log` in the data dir. Each JSON line is one tool call with `waitMs` (time queued behind earlier calls) and `ms` (its own run); a timed-out call also lists every tab with `responsive` and the free memory. `jhrome status` lists `browser.warnings`; one about cookies not being saved means sign-ins will not survive a restart, and it says how to fix it. Browser warnings and errors are in `logs/chrome.log`, and those of the session before the last restart in `logs/chrome.previous.log`.
 

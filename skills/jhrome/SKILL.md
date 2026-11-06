@@ -89,7 +89,7 @@ jhrome read "로그인한 계정 이름" --ref f2e40
 | `jhrome open` / `jhrome close` / `jhrome restart` | Start jhrome / close the whole browser / close and start it again with its Default-profile tabs and cookies (installed release only). Workspace tabs come back in their workspace with their labels; other restored tabs belong to no workspace: adopt them from `jhrome workspaces`. Close or restart only when the user asks |
 | `jhrome status` / `jhrome version` | Instance state / installed and running versions |
 
-- `--data-dir <dir>` (or `JHROME_DATA_DIR`) picks the jhrome instance. Without it the user's default instance is used.
+- `--data-dir <dir>` (or `JHROME_DATA_DIR`) picks the jhrome instance. Without it the user's default instance is used. An installed jhrome on macOS or Windows starts only on its default data dir; to keep sign-ins apart, use a profile (`jhrome profiles new <name>`), not a second data dir.
 - File paths in results are absolute. Files the browser writes go to `<data-dir>/playwright-output`.
 - JavaScript dialogs raised during `act`/`has`/`read`/`capture` are dismissed and reported. Add `--accept-dialogs` to accept them, after checking the message with the user when the action matters.
 - `--method` picks how input reaches the page (default `playwright.Input.dispatchKeyEvent` for text). When input fails, the error names the failed method and the others; retry with another only if the page needs it, such as a keyboard security module that refuses key events.
